@@ -21,7 +21,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.0.4] - 2014-08-09
 ### Added
-- for new features.
+- docker-compose init setup
+- dockerfile init setup for pypy3 and sodapy
+- project_plan.md init setup
+- git repo setup
+- first data pull success
 
 ### Removed
 - for now removed features.
