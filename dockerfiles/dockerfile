@@ -1,0 +1,41 @@
+# https://docs.docker.com/engine/reference/builder/
+# Python 3 in a container
+#
+# docker build -t temp_pythonapp_name
+#
+# docker run -d --rm\
+#	-mount source=./,target=/usr/src/app \
+#	-p 4000:80 \
+#	--name devtest_python \
+#	dockerfile_name
+#
+#
+#
+#
+#
+# Use an official Python runtime as a parent image
+FROM python:3-alpine
+
+# Set the working directory to /app
+WORKDIR /usr/src/app
+
+# Copy the current directory contents into the container at /usr/src/app
+COPY . /usr/src/app
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r \
+	requirements.txt
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Define label
+LABEL 	<key>=<value> \
+	<key>=<value>
+
+# Run --help command from my script as default
+ENTRYPOINT ["python"]
+CMD ["./your-daemon-or-script.py", "--help"]
+
+#References
+#https://github.com/jessfraz/dockerfiles

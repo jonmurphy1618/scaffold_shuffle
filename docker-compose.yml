@@ -1,0 +1,22 @@
+#https://docs.docker.com/compose/compose-file/
+version: '2'
+services:
+  app:
+    build: ./app/
+    ports:
+      - "5000:5000"
+    #env_file: .env
+    #command: 
+    depends_on:
+      - db
+    volumes:
+      - $PWD:/usr/src/app
+    working_dir: /usr/src/app
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
