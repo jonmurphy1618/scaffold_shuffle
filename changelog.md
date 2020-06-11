@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.0.1] - 2018-08-09
 ### Added
+###### 200605
+- data output to txt is successful. consider adopting PostGIS as database.
+
+
 ###### 200512
 - data pull limited to required info for map
 - possible feature change to google maps layer

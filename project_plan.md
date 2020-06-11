@@ -57,6 +57,7 @@ Project team directory for all communications is:
 The quality standards that will be followed:
 - [Python PEP 8 Style Guide](https://www.python.org/dev/peps/pep-0008/)
 - [Docker Guide](https://docs.docker.com/get-started/)
+- [Sodapy Documentation](https://github.com/xmunoz/sodapy)
 
 The quality metrics the project will need to meet:
 - Daily data updating.

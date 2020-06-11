@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 100%;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+function initMap() {
+  var nyc = {lat: 40.746787, lng: -73.987744};
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 13, center: nyc});
+  map.data.loadGeoJson('output_data.json');
+  map.data.setStyle({
+    icon: {
+      url: "https://s3.amazonaws.com/napsg-web/symbology/data/PNG9/Public_Alert/Public_Alerts_and_Warnings/Civil-Danger-Warning_64x64.png",
+      scaledSize: new google.maps.Size(20,20)
+    }
+  })
+}
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzrOvWy-7lE7pDz1YZKSj41a05tlAzTaI&callback=initMap">
+    </script>
+  </body>
+</html>

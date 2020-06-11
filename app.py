@@ -1,39 +1,56 @@
 #!/usr/bin/env python
 
 from sodapy import Socrata
+from geojson import Point, Feature, FeatureCollection, dumps, MultiPoint
 
-
-client = Socrata("data.cityofnewyork.us", None)
+client = Socrata("data.cityofnewyork.us", "X3XQZne0NWjoESQq9dSgg51v1")
 db_id = "ipu4-2q9a"
 
-def pull_dob_data( limit = 1):
+def pull_dob_data(limit = 1):
 	borough = "MANHATTAN"
-	street_name = "CANAL STREET"
+	# permit_type options: https://www1.nyc.gov/site/buildings/industry/permit-type-and-job-status-codes.page
+	permit_type = "DM, FN, SH, SF, OT, FO, EA, NB, SG, EQ"
 
-	return client.get(db_id, \
-			limit = limit, \
-			borough=borough, \
-			street_name=street_name, \
-			select="house__, \
-				street_name, \
-				zip_code, \
-				bldg_type, \
-				work_type, \
-				permit_status, \
-				filing_status, \
-				permit_type, \
-				permit_sequence__, \
-				permit_subtype, \
-				filing_date, \
-				issuance_date, \
-				expiration_date, \
-				job_start_date, \
-				dobrundate, \
-				permit_si_no, \
-				gis_latitude, \
-				gis_longitude, \
-				gis_council_district, \
-				gis_census_tract, \
-				gis_nta_name")
+	# SQL query based on below site:
+	# https://data.cityofnewyork.us/Housing-Development/DOB-Permit-Issuance/ipu4-2q9a
+	return client.get(db_id,  query=f" \
+		SELECT job__, gis_latitude, gis_longitude \
+		WHERE borough='MANHATTAN' \
+		AND (permit_type='DM' \
+		OR permit_type='FN' \
+		OR permit_type='SH' \
+		OR permit_type='SF' \
+		OR permit_type='OT' \
+		OR permit_type='FO' \
+		OR permit_type='EA' \
+		OR permit_type='NB' \
+		OR permit_type='SG' \
+		OR permit_type='EQ' \
+		)\
+		LIMIT {limit}")
 
-print(pull_dob_data(limit = 1))
+def csv_output(limit = 1):
+	with open('output_data.csv', 'w') as file:
+		map_data = pull_dob_data(limit)
+		for each in map_data:
+			if each.get('gis_latitude') and each.get('gis_longitude'):
+				file.writelines(f"{each['job__']},{each['gis_latitude']},{each['gis_longitude']}" + '\n')
+
+def geojson_output(limit = 1):
+	all_points = []
+	with open('output_data.json', 'w') as file:
+		map_data = pull_dob_data(limit)
+		for each in map_data:
+			if each.get('gis_latitude') and each.get('gis_longitude'):
+				each_point = (float(each['gis_longitude']),float(each['gis_latitude']))
+				all_points.append(each_point)
+		file.writelines(dumps(FeatureCollection([Feature(geometry=MultiPoint(all_points))])))
+#				each_point = Point((float(each['gis_latitude']),float(each['gis_longitude'])))
+#				file.writelines(dumps(each_point))
+
+def main():
+#	pull_dob_data()
+#	csv_output(limit = 100)
+	geojson_output(limit = 1000)
+
+main()
