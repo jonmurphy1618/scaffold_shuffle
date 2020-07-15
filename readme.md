@@ -23,6 +23,7 @@ The data pulled from DOB database is currently filtered by permit types, borough
 ### 0.0.1 - 2020-07-15
 - maps active constructions sites that likely require scaffolding
 - shows users location
+- shows street view when left click on map marker
 
 ## Credits
 - [NYC DOB Data](https://data.cityofnewyork.us/Housing-Development/DOB-Permit-Issuance/ipu4-2q9a)
