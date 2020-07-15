@@ -3,8 +3,9 @@
 from sodapy import Socrata
 from geojson import Point, Feature, FeatureCollection, dumps, MultiPoint
 
-client = Socrata("data.cityofnewyork.us", "X3XQZne0NWjoESQq9dSgg51v1")
+client = Socrata("data.cityofnewyork.us", "5kfMUjusxqGpjSi5EZtT2femX")
 db_id = "ipu4-2q9a"
+todays_date = "2020-01-01"
 
 def pull_dob_data(limit = 1):
 	borough = "MANHATTAN"
@@ -16,6 +17,7 @@ def pull_dob_data(limit = 1):
 	return client.get(db_id,  query=f" \
 		SELECT job__, gis_latitude, gis_longitude \
 		WHERE borough='MANHATTAN' \
+		AND expiration_date > {todays_date} \
 		AND (permit_type='DM' \
 		OR permit_type='FN' \
 		OR permit_type='SH' \
@@ -28,6 +30,7 @@ def pull_dob_data(limit = 1):
 		OR permit_type='EQ' \
 		)\
 		LIMIT {limit}")
+
 
 def csv_output(limit = 1):
 	with open('output_data.csv', 'w') as file:
@@ -50,7 +53,7 @@ def geojson_output(limit = 1):
 
 def main():
 #	pull_dob_data()
-#	csv_output(limit = 100)
-	geojson_output(limit = 1000)
+#	csv_output(limit = 1000)
+	geojson_output(limit = 1000000)
 
 main()

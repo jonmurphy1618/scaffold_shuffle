@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8"/>
     <style>
-       /* Set the size of the div element that contains the map */
       #map {
-        height: 100%;  /* The height is 400 pixels */
-        width: 100%;  /* The width is the width of the web page */
+        height: 100%;
+        width: 100%;
        }
       html, body {
         height: 100%;
@@ -15,20 +15,58 @@
     </style>
   </head>
   <body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <div id="map"></div>
     <script>
 function initMap() {
+/* set map center and init zoom  */
   var nyc = {lat: 40.746787, lng: -73.987744};
   var map = new google.maps.Map(
-      document.getElementById('map'), {zoom: 13, center: nyc});
+      document.getElementById('map'), {zoom: 13, center: nyc, scaleControl: true, mapTypeControl: false});
+
+/* load the scaffold locations and !icon  */
   map.data.loadGeoJson('output_data.json');
   map.data.setStyle({
     icon: {
       url: "https://s3.amazonaws.com/napsg-web/symbology/data/PNG9/Public_Alert/Public_Alerts_and_Warnings/Civil-Danger-Warning_64x64.png",
       scaledSize: new google.maps.Size(20,20)
     }
-  })
+  });
+
+/* click on marker opens street view at marker location  */
+  map.data.addListener('click', function(event) {
+    map.setZoom(18);
+    map.setCenter(event.latLng);
+    panorama = map.getStreetView();
+    panorama.setPosition(event.latLng);
+    panorama.setPov({heading: 0, pitch:0});
+    panorama.setVisible(true);
+  });
+
+/* based on users html5 geolocation, set map center, zoom, and add icon  */
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      map.setCenter(pos);
+      map.setZoom(16);
+      my_location = new google.maps.Circle({
+        map: map,
+        center: pos,
+        radius: 15,
+        strokeColor: '#0066ff',
+        strokeOpacity: 0.3,
+        strokeWeight: 10,
+        fillColor: '#0033ff',
+        fillOpacity: 1
+      });
+    });
+  } else { }
+
 }
+
     </script>
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
@@ -36,7 +74,7 @@ function initMap() {
     * The callback parameter executes the initMap() function
     -->
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzrOvWy-7lE7pDz1YZKSj41a05tlAzTaI&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAAM1YiI8lI6iSqR7Vvwk9eGvL54zEg7c&callback=initMap">
     </script>
   </body>
 </html>
