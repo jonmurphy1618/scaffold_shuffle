@@ -5,6 +5,8 @@ The goal of this project is to generate the best walking route to avoid construc
 
 The current status of this project is scaffold locations are plotted on a map with the users location. Left click a map marker will bring up the street view and show the scaffolding if the street view is relatively recent. The direction functionality has not been implemented yet. For this project to be publicly usable, the google maps api would need to be replaced with OpenStreetMap api.
 
+![IMG showing map with scaffold locations](img.png)
+
 ## Installation
 Install docker and docker-compose.
 
